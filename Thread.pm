@@ -1,9 +1,8 @@
-# $File$ $Author$
-# $Revision$ $Change$ $DateTime$
-
 package Text::Thread;
+use strict;
+use warnings;
 
-$VERSION = '0.1';
+our $VERSION = '0.2';
 
 no warnings  'closure';
 
@@ -22,10 +21,10 @@ Text::Thread - format threaded items to ascii tree
 			     { title => 'test3'}]}]},
      { title => 'test4' } );
 
-    my @list = Text::Thread::format
-	('child', 'threadtitle', 'title', \@tree)
+    my @list = Text::Thread::formatthread
+        ('child', 'threadtitle', 'title', \@tree);
 
-    print "$_->{threadtitle}\n" foreach @seq;
+    print "$_->{threadtitle}\n" foreach @list;
 
 =head1 DESCRIPTION
 
@@ -34,7 +33,7 @@ often used in threaded mail and netnews reader.
 
 =over 4
 
-=item format CHILD THREADTITLE TITLE TREE
+=item formatthread CHILD THREADTITLE TITLE TREE
 
 format the given TREE. CHILD is the hash key for child nodes in the
 items in TREE. it could be either arrayref or hashref. THREADTITLE is
@@ -48,6 +47,7 @@ be put at the leaves of the tree.
 # warning: this is lisp
 sub formatthread {
     my ($c, $t, $ot, $tree) = @_;
+    no warnings 'uninitialized';
     sub flat {
 	my @child = ref($_[0]->{$c}) eq 'HASH' ?
 	    values %{$_[0]->{$c}} : @{$_[0]->{$c}} if $_[0]->{$c};
@@ -69,13 +69,17 @@ sub formatthread {
 
 1;
 
+=head1 BUGS
+
+It doesn't work if the depth of the tree is more than 32.
+
 =head1 AUTHORS
 
 Chia-liang Kao E<lt>clkao@clkao.org>
 
 =head1 COPYRIGHT
 
-Copyright 2001 by Chia-liang kao E<lt>clkao@clkao.org>.
+Copyright 2001,2006 by Chia-liang kao E<lt>clkao@clkao.org>.
 
 This program is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.

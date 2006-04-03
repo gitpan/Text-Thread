@@ -2,11 +2,11 @@
 # $Revision$ $Change$ $DateTime$
 
 use strict;
-use Test;
+use Test::More;
 
 BEGIN { plan tests => 7 }
 
-ok(eval("use Text::Thread; 1"));
+use_ok("Text::Thread");
 
 my @list =
     (
